@@ -1,9 +1,7 @@
-package service;
+package main.java.service;
 
-import model.Drink;
-import model.Food;
-import model.MenuItems;
-import repository.MenuRepository;
+import main.java.model.MenuItems;
+import main.java.repository.MenuRepository;
 
 import java.util.List;
 

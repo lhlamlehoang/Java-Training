@@ -1,7 +1,7 @@
-package service;
+package main.java.service;
 
-import model.Bill;
-import repository.BillRepository;
+import main.java.model.Bill;
+import main.java.repository.BillRepository;
 
 import java.io.*;
 import java.util.List;

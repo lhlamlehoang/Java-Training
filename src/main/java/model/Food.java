@@ -1,12 +1,14 @@
-package model;
-
-import java.awt.*;
+package main.java.model;
 
 public class Food extends MenuItems {
     private String mealType;
 
-    public Food (int id, String name, String description, Image img, double price, String mealType, int menuType){
-        super(id, name, description, img, price, menuType);
+    public Food (){
+        super();
+    }
+
+    public Food (int id, String name, String description, double price, String mealType, int menuType){
+        super(id, name, description, price, menuType);
         this.mealType = mealType;
     }
 

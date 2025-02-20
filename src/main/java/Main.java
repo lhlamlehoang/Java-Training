@@ -1,12 +1,11 @@
-import model.*;
-import service.BillService;
-import service.MenuService;
+package main.java;
 
-import java.awt.*;
+import main.java.model.*;
+import main.java.service.BillService;
+import main.java.service.MenuService;
+
 import java.io.*;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -14,35 +13,20 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         // Initialize data
-        MenuItems coca = new Drink(1, "Coca", "Coca Cola", null, 20000, "Soft Drink", 1);
-        MenuItems pepsi = new Drink(2, "Pepsi", "Pepsi Co", null, 20000, "Soft Drink", 1);
-        MenuItems chicken = new Food(3, "Fried Chicken", "Fast food", null, 30000, "Lunch", 2);
-        MenuItems Hamburger = new Food(4, "Hamburger", "Beef Hamburger", null, 25000, "Lunch", 2);
+        MenuItems coca = new Drink(1, "Coca", "Coca Cola", 20000, "Soft Drink", 1);
+        MenuItems pepsi = new Drink(2, "Pepsi", "Pepsi Co", 20000, "Soft Drink", 1);
+        MenuItems chicken = new Food(3, "Fried Chicken", "Fast food", 30000, "Lunch", 2);
+        MenuItems hamburger = new Food(4, "Hamburger", "Beef Hamburger", 25000, "Lunch", 2);
 
         MenuService menuService = new MenuService();
         menuService.addMenuItems(coca);
         menuService.addMenuItems(pepsi);
         menuService.addMenuItems(chicken);
-        menuService.addMenuItems(Hamburger);
+        menuService.addMenuItems(hamburger);
 
         BillService billService = new BillService();
 
         String filePath = "D:\\HL\\JavaTraining\\bill.txt";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // Read user input
         Scanner scanner = new Scanner(System.in);
@@ -87,11 +71,11 @@ public class Main {
                     String type = scanner.nextLine();
 
                     if (optAdd.equals("1")){
-                        MenuItems drink = new Drink(id, name, description, null, price, type, 1);
+                        MenuItems drink = new Drink(id, name, description, price, type, 1);
                         menuService.addMenuItems(drink);
                     }
                     else{
-                        MenuItems food = new Food(id, name, description, null, price, type, 2);
+                        MenuItems food = new Food(id, name, description, price, type, 2);
                         menuService.addMenuItems(food);
                     }
 
@@ -130,11 +114,11 @@ public class Main {
 
                         int menuType = menuService.getItemById(itemIdUpdate).getMenuType();
                         if (menuType == 1){
-                            MenuItems itemUpdate = new Drink(itemIdUpdate, nameUpdate, descriptionUpdate, null, priceUpdate, typeUpdate, 1);
+                            MenuItems itemUpdate = new Drink(itemIdUpdate, nameUpdate, descriptionUpdate, priceUpdate, typeUpdate, 1);
                             menuService.updateItem(itemUpdate);
                         }
                         else{
-                            MenuItems itemUpdate = new Food(itemIdUpdate, nameUpdate, descriptionUpdate, null, priceUpdate, typeUpdate, 2);
+                            MenuItems itemUpdate = new Food(itemIdUpdate, nameUpdate, descriptionUpdate, priceUpdate, typeUpdate, 2);
                             menuService.updateItem(itemUpdate);
                         }
                     }
@@ -185,7 +169,7 @@ public class Main {
                         scanner.nextLine();
 
                         // Add item into bill
-                        BillItems newBillItem = new BillItems(menuService.getItemById(selectedId), selectedQty);
+                        BillItems newBillItem = new BillItems(123, menuService.getItemById(selectedId), selectedQty);
 
                         BillItems currentItem = billItemsList.get(selectedId);
                         if (billItemsList.containsKey(selectedId)){
@@ -202,6 +186,26 @@ public class Main {
                         System.out.println("\nYour bill: ");
                         Bill bill = new Bill(billService.getListBill().size(), billItemsList.values().stream().toList(), LocalDateTime.now());
                         System.out.println(bill);
+
+
+                        // Use BufferedOutputStream to write into a file from object Bill
+                        try{
+                            File f = new File(filePath);
+                            if (!f.exists()){
+                                f.createNewFile();
+                            }
+                            FileOutputStream fo = new FileOutputStream(f);
+                            BufferedOutputStream bo = new BufferedOutputStream(fo);
+                            bo.write(bill.toString().getBytes());
+
+                            System.out.println("Your bill has been saved at: " + filePath);
+                            bo.close();
+                            fo.close();
+                        }
+                        catch (IOException e){
+                            e.printStackTrace();
+                            return;
+                        }
                     }
                     break;
 

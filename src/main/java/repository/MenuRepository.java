@@ -1,8 +1,6 @@
-package repository;
+package main.java.repository;
 
-import model.Drink;
-import model.Food;
-import model.MenuItems;
+import main.java.model.MenuItems;
 
 import java.util.*;
 

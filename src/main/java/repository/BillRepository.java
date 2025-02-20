@@ -1,7 +1,7 @@
-package repository;
+package main.java.repository;
 
-import model.Bill;
-import model.BillItems;
+import main.java.model.Bill;
+import main.java.model.BillItems;
 
 import java.io.*;
 import java.util.ArrayList;

@@ -1,15 +1,19 @@
-package model;
+package main.java.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Bill implements Serializable {
     private int id;
     private List<BillItems> lstBillItems = new ArrayList<BillItems>();
     private LocalDateTime billDate;
+
+    public Bill (){
+
+    }
 
     public Bill(int id, List<BillItems> lstBillItems, LocalDateTime billDate){
         this.id = id;
@@ -48,14 +52,19 @@ public class Bill implements Serializable {
         StringBuilder bill = new StringBuilder();
         double total = 0;
         for (BillItems item : lstBillItems){
-            bill.append("\nItem: ").append(item.getMenuItems().getName())
+            bill.append("\n****************************************")
+                    .append("\nItem: ").append(item.getMenuItems().getName())
                     .append("\nQuantity: ").append(item.getQuantity())
                     .append("\nPrice: ").append(item.getMenuItems().getPrice())
                     .append("\nTotal amount: ").append(item.getQuantity() * item.getMenuItems().getPrice())
-                    .append("\n");
+                    .append("\n****************************************\n");
             total += item.getQuantity() * item.getMenuItems().getPrice();
         }
-        bill.append("\nTotal: " + total);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String date = billDate.format(dateTimeFormatter);
+
+        bill.append("\nTotal: ").append(total)
+            .append("\nTime: ").append(date);
         return bill.toString();
     }
 }

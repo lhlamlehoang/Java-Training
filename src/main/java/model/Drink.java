@@ -1,16 +1,14 @@
-package model;
-
-import java.awt.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.Objects;
+package main.java.model;
 
 public class Drink extends MenuItems {
     private String type;
 
-    public Drink(int id, String name, String description, Image img, double price, String type, int menuType){
-        super(id, name, description, img, price, menuType);
+    public Drink (){
+        super();
+    }
+
+    public Drink(int id, String name, String description, double price, String type, int menuType){
+        super(id, name, description, price, menuType);
         this.type = type;
     }
 

@@ -1,22 +1,20 @@
-package model;
-
-import java.awt.*;
-import java.io.*;
-import java.util.Comparator;
+package main.java.model;
 
 public abstract class MenuItems {
     protected int id;
     protected String name;
     protected String description;
-    protected Image img;
     protected double price;
     protected int menuType;
 
-    public MenuItems(int id, String name, String description, Image img, double price, int menuType){
+    public MenuItems() {
+
+    }
+
+    public MenuItems(int id, String name, String description, double price, int menuType){
         this.id = id;
         this.name = name;
         this.description = description;
-        this.img = img;
         this.price = price;
         this.menuType = menuType; // 1: Drink, 2: Food
     }
@@ -45,14 +43,6 @@ public abstract class MenuItems {
 
     public void setDescription(String description){
         this.description = description;
-    }
-
-    public Image getImage(){
-        return img;
-    }
-
-    public void setImage(Image img){
-        this.img = img;
     }
 
     public double getPrice(){
