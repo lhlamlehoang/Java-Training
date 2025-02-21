@@ -31,205 +31,204 @@ public class Main {
         // Read user input
         Scanner scanner = new Scanner(System.in);
         int opt = -1;
+        MenuDisplay menuDisplay = new MenuDisplay();
 
         while(opt != 0){
-            System.out.println();
-            coca.displayMenu();
-            System.out.print("Input the number that you want to choose: ");
-            opt = scanner.nextInt();
-            scanner.nextLine();
+            try{
+                System.out.println();
+                menuDisplay.displayMenu();
+                System.out.print("Input the number that you want to choose: ");
+                opt = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (opt){
-                case 1: // Show Menu
-                    ListIterator<MenuItems> listIterator = menuService.getListItems(0).listIterator();
-                    while(listIterator.hasNext()){
-                        System.out.println(listIterator.next());
-                    }
-                    break;
-
-                case 2: // Add item
-                    System.out.println("1. Add Drink\n2. Add Food");
-                    String optAdd = scanner.nextLine();
-
-                    String MenuType = optAdd.equals("1") ? "Drink" : "Food";
-
-                    System.out.print("Input " + MenuType + " ID: ");
-                    int id = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.print("Input " + MenuType + " name: ");
-                    String name = scanner.nextLine();
-
-                    System.out.print("Input " + MenuType + " description: ");
-                    String description = scanner.nextLine();
-
-                    System.out.print("Input " + MenuType + " price: ");
-                    double price = scanner.nextDouble();
-                    scanner.nextLine();
-
-                    System.out.print("Input " + MenuType + " type: ");
-                    String type = scanner.nextLine();
-
-                    if (optAdd.equals("1")){
-                        MenuItems drink = new Drink(id, name, description, price, type, 1);
-                        menuService.addMenuItems(drink);
-                    }
-                    else{
-                        MenuItems food = new Food(id, name, description, price, type, 2);
-                        menuService.addMenuItems(food);
-                    }
-
-                    System.out.println("Item has been added!");
-                    break;
-
-                case 3: // Update item
-                    System.out.print("Input the ID of item you want to update: ");
-                    int itemIdUpdate = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.println(menuService.getItemById(itemIdUpdate));
-                    while (menuService.getItemById(itemIdUpdate) == null){
-                        System.out.println("Cannot find any item with this id, please input again or 0 to exit: ");
-                        itemIdUpdate = scanner.nextInt();
-                        scanner.nextLine();
-                        if (itemIdUpdate == 0){
-                            break;
+                switch (opt){
+                    case 1: // Show Menu
+                        ListIterator<MenuItems> listIterator = menuService.getListItems(0).listIterator();
+                        while(listIterator.hasNext()){
+                            System.out.println(listIterator.next());
                         }
-                    }
+                        break;
 
+                    case 2: // Add item
+                        System.out.println("1. Add Drink\n2. Add Food");
+                        String optAdd = scanner.nextLine();
 
-                    if (menuService.getItemById(itemIdUpdate) != null){
-                        System.out.print("Input item name: ");
-                        String nameUpdate = scanner.nextLine();
+                        String MenuType = optAdd.equals("1") ? "Drink" : "Food";
 
-                        System.out.print("Input item description: ");
-                        String descriptionUpdate = scanner.nextLine();
-
-                        System.out.print("Input item price: ");
-                        double priceUpdate = scanner.nextDouble();
+                        System.out.print("Input " + MenuType + " ID: ");
+                        int id = scanner.nextInt();
                         scanner.nextLine();
 
-                        System.out.print("Input item type: ");
-                        String typeUpdate = scanner.nextLine();
+                        System.out.print("Input " + MenuType + " name: ");
+                        String name = scanner.nextLine();
 
-                        int menuType = menuService.getItemById(itemIdUpdate).getMenuType();
-                        if (menuType == 1){
-                            MenuItems itemUpdate = new Drink(itemIdUpdate, nameUpdate, descriptionUpdate, priceUpdate, typeUpdate, 1);
-                            menuService.updateItem(itemUpdate);
+                        System.out.print("Input " + MenuType + " description: ");
+                        String description = scanner.nextLine();
+
+                        System.out.print("Input " + MenuType + " price: ");
+                        double price = scanner.nextDouble();
+                        scanner.nextLine();
+
+                        System.out.print("Input " + MenuType + " type: ");
+                        String type = scanner.nextLine();
+
+                        if (optAdd.equals("1")){
+                            MenuItems drink = new Drink(id, name, description, price, type, 1);
+                            menuService.addMenuItems(drink);
                         }
                         else{
-                            MenuItems itemUpdate = new Food(itemIdUpdate, nameUpdate, descriptionUpdate, priceUpdate, typeUpdate, 2);
-                            menuService.updateItem(itemUpdate);
+                            MenuItems food = new Food(id, name, description, price, type, 2);
+                            menuService.addMenuItems(food);
                         }
-                    }
 
-                    System.out.println("Item has been updated!");
-                    break;
+                        System.out.println("Item has been added!");
+                        break;
 
-                case 4: // Delete item
-                    System.out.print("Input the ID of item you want to delete: ");
-                    int itemIdDelete = scanner.nextInt();
-                    scanner.nextLine();
-
-                    while (menuService.getItemById(itemIdDelete) == null){
-                        System.out.println("Cannot find any item with this id, please input again or 0 to exit: ");
-                        itemIdDelete = scanner.nextInt();
-                        scanner.nextLine();
-                        if (itemIdDelete == 0){
-                            break;
-                        }
-                    }
-
-                    if (menuService.getItemById(itemIdDelete) != null) {
-                        menuService.deleteItem(menuService.getItemById(itemIdDelete));
-                    }
-                    System.out.println("Item has been deleted!");
-
-                    break;
-
-                case 5:
-                    Map<Integer, BillItems> billItemsList = new HashMap<>();
-                    ListIterator<MenuItems> itemsIterator = menuService.getListItems(0).listIterator();
-                    while(itemsIterator.hasNext()){
-                        System.out.println(itemsIterator.next());
-                    }
-
-                    while (true){
-                        System.out.print("ID of menu item you want to choose (or press 0 to exit): ");
-                        int selectedId = scanner.nextInt();
+                    case 3: // Update item
+                        System.out.print("Input the ID of item you want to update: ");
+                        int itemIdUpdate = scanner.nextInt();
                         scanner.nextLine();
 
-                        // Exit select if select 0
-                        if (selectedId == 0){
-                            break;
-                        }
-
-                        System.out.print("Input quantity: ");
-                        int selectedQty = scanner.nextInt();
-                        scanner.nextLine();
-
-                        // Add item into bill
-                        BillItems newBillItem = new BillItems(123, menuService.getItemById(selectedId), selectedQty);
-
-                        BillItems currentItem = billItemsList.get(selectedId);
-                        if (billItemsList.containsKey(selectedId)){
-                            currentItem.setQuantity(currentItem.getQuantity() + selectedQty);
-                        }
-                        else{
-                            billItemsList.put(selectedId, newBillItem);
-                        }
-                    }
-
-
-                    if (!billItemsList.isEmpty()){
-                        // Print total bill
-                        System.out.println("\nYour bill: ");
-                        Bill bill = new Bill(billService.getListBill().size(), billItemsList.values().stream().toList(), LocalDateTime.now());
-                        System.out.println(bill);
-
-
-                        // Use BufferedOutputStream to write into a file from object Bill
-                        try{
-                            File f = new File(filePath);
-                            if (!f.exists()){
-                                f.createNewFile();
+                        System.out.println(menuService.getItemById(itemIdUpdate));
+                        while (menuService.getItemById(itemIdUpdate) == null){
+                            System.out.println("Cannot find any item with this id, please input again or 0 to exit: ");
+                            itemIdUpdate = scanner.nextInt();
+                            scanner.nextLine();
+                            if (itemIdUpdate == 0){
+                                break;
                             }
-                            FileOutputStream fo = new FileOutputStream(f);
-                            BufferedOutputStream bo = new BufferedOutputStream(fo);
-                            bo.write(bill.toString().getBytes());
-
-                            System.out.println("Your bill has been saved at: " + filePath);
-                            bo.close();
-                            fo.close();
                         }
-                        catch (IOException e){
-                            e.printStackTrace();
-                            return;
+
+
+                        if (menuService.getItemById(itemIdUpdate) != null){
+                            System.out.print("Input item name: ");
+                            String nameUpdate = scanner.nextLine();
+
+                            System.out.print("Input item description: ");
+                            String descriptionUpdate = scanner.nextLine();
+
+                            System.out.print("Input item price: ");
+                            double priceUpdate = scanner.nextDouble();
+                            scanner.nextLine();
+
+                            System.out.print("Input item type: ");
+                            String typeUpdate = scanner.nextLine();
+
+                            int menuType = menuService.getItemById(itemIdUpdate).getMenuType();
+                            if (menuType == 1){
+                                MenuItems itemUpdate = new Drink(itemIdUpdate, nameUpdate, descriptionUpdate, priceUpdate, typeUpdate, 1);
+                                menuService.updateItem(itemUpdate);
+                            }
+                            else{
+                                MenuItems itemUpdate = new Food(itemIdUpdate, nameUpdate, descriptionUpdate, priceUpdate, typeUpdate, 2);
+                                menuService.updateItem(itemUpdate);
+                            }
                         }
-                    }
-                    break;
 
-                case 0:
-                    break;
+                        System.out.println("Item has been updated!");
+                        break;
 
-                default:
-                    System.out.println("Invalid choice, please input again!");
+                    case 4: // Delete item
+                        System.out.print("Input the ID of item you want to delete: ");
+                        int itemIdDelete = scanner.nextInt();
+                        scanner.nextLine();
+
+                        while (menuService.getItemById(itemIdDelete) == null){
+                            System.out.println("Cannot find any item with this id, please input again or 0 to exit: ");
+                            itemIdDelete = scanner.nextInt();
+                            scanner.nextLine();
+                            if (itemIdDelete == 0){
+                                break;
+                            }
+                        }
+
+                        if (menuService.getItemById(itemIdDelete) != null) {
+                            menuService.deleteItem(menuService.getItemById(itemIdDelete));
+                        }
+                        System.out.println("Item has been deleted!");
+
+                        break;
+
+                    case 5:
+                        Map<Integer, BillItems> billItemsList = new HashMap<>();
+                        ListIterator<MenuItems> itemsIterator = menuService.getListItems(0).listIterator();
+                        while(itemsIterator.hasNext()){
+                            System.out.println(itemsIterator.next());
+                        }
+
+                        while (true){
+                            System.out.print("ID of menu item you want to choose (or press 0 to exit): ");
+                            int selectedId = scanner.nextInt();
+                            scanner.nextLine();
+
+                            // Exit select if select 0
+                            if (selectedId == 0){
+                                break;
+                            }
+
+                            System.out.print("Input quantity: ");
+                            int selectedQty = scanner.nextInt();
+                            scanner.nextLine();
+
+                            // Add item into bill
+                            BillItems newBillItem = new BillItems(123, menuService.getItemById(selectedId), selectedQty);
+
+                            BillItems currentItem = billItemsList.get(selectedId);
+                            if (billItemsList.containsKey(selectedId)){
+                                currentItem.setQuantity(currentItem.getQuantity() + selectedQty);
+                            }
+                            else{
+                                billItemsList.put(selectedId, newBillItem);
+                            }
+                        }
 
 
+                        if (!billItemsList.isEmpty()){
+                            // Print total bill
+                            System.out.println("\nYour bill: ");
+                            Bill bill = new Bill(billService.getListBill().size(), billItemsList.values().stream().toList(), LocalDateTime.now());
+                            System.out.println(bill);
+
+
+                            // Use BufferedOutputStream to write into a file from object Bill
+                            try{
+                                File f = new File(filePath);
+                                if (!f.exists()){
+                                    f.createNewFile();
+                                }
+                                FileOutputStream fo = new FileOutputStream(f);
+                                BufferedOutputStream bo = new BufferedOutputStream(fo);
+                                bo.write(bill.toString().getBytes());
+
+                                System.out.println("Your bill has been saved at: " + filePath);
+                                bo.close();
+                                fo.close();
+                            }
+                            catch (IOException e){
+                                e.printStackTrace();
+                                return;
+                            }
+                        }
+                        break;
+
+                    case 6:
+                        System.out.print("Input the file path of bill: ");
+                        String path = scanner.nextLine();
+                        BillPrinter billPrinter = new BillPrinter();
+                        billPrinter.printBillFromFile(path);
+                        break;
+
+                    case 0:
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice, please input again!");
+                }
+            }
+            catch (Exception e){
+                System.out.println("Something went wrong!");
+                return;
             }
         }
-
-
-
-
-        // Update drink
-//        Drink cocaUpdate = new Drink(1, "Coca Cola", "Soft Drink", null, 25000, "Soft Drink");
-//        menuService.updateDrink(cocaUpdate);
-//        // Delete drink
-//        menuService.deleteDrink(tiger);
-
-
-
-
     }
 }

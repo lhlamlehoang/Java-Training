@@ -1,6 +1,10 @@
 package main.java.model;
 
-public abstract class MenuItems {
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class MenuItems {
     protected int id;
     protected String name;
     protected String description;
@@ -18,8 +22,6 @@ public abstract class MenuItems {
         this.price = price;
         this.menuType = menuType; // 1: Drink, 2: Food
     }
-
-    public abstract void displayMenu();
 
     public int getId(){
         return id;

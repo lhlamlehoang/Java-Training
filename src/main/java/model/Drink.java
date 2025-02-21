@@ -12,11 +12,6 @@ public class Drink extends MenuItems {
         this.type = type;
     }
 
-    @Override
-    public void displayMenu(){
-        System.out.println("1. Show Menu\n2. Add Menu\n3. Update Menu\n4. Delete Menu\n5. Order\n0. Exit");
-    }
-
     public String getType(){
         return type;
     }

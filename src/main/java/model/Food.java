@@ -12,10 +12,10 @@ public class Food extends MenuItems {
         this.mealType = mealType;
     }
 
-    @Override
-    public void displayMenu(){
-        System.out.println("1. Show Menu \n 2. Add Menu \n 3. Update Menu \n 4. Delete Menu");
-    }
+//    @Override
+//    public void displayMenu(){
+//        System.out.println("1. Show Menu \n 2. Add Menu \n 3. Update Menu \n 4. Delete Menu");
+//    }
 
     public String getMealType(){
         return mealType;
