@@ -1,17 +1,15 @@
-package com.training.JavaTrainingPhase2.security;
+package com.training.javatrainingphase2.security;
 
-import com.training.JavaTrainingPhase2.service.JwtService;
-import com.training.JavaTrainingPhase2.service.UserInfoService;
+import com.training.javatrainingphase2.service.JwtService;
+import com.training.javatrainingphase2.service.UserInfoService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;

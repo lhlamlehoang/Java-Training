@@ -1,12 +1,12 @@
-package com.training.JavaTrainingPhase2.security;
+package com.training.javatrainingphase2.security;
 
-import com.training.JavaTrainingPhase2.model.UserInfo;
+import com.training.javatrainingphase2.model.UserInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +18,9 @@ public class UserInfoDetails implements UserDetails {
     public UserInfoDetails(UserInfo userInfo){
         this.username = userInfo.getName();
         this.password = userInfo.getPassword();
-        this.authorities = List.of(userInfo.getRoles().split(","))
-                .stream()
-                .map(SimpleGrantedAuthority::new)
+        this.authorities = Arrays.stream(userInfo.getRoles().split(","))
+                .map(String::trim)
+                .map(role -> new SimpleGrantedAuthority(role.startsWith("ROLE_") ? role : "ROLE_" + role))
                 .collect(Collectors.toList());
     }
 

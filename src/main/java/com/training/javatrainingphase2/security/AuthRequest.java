@@ -1,4 +1,4 @@
-package com.training.JavaTrainingPhase2.security;
+package com.training.javatrainingphase2.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

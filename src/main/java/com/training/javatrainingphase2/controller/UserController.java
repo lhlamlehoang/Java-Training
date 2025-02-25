@@ -1,11 +1,10 @@
-package com.training.JavaTrainingPhase2.controller;
+package com.training.javatrainingphase2.controller;
 
-import com.training.JavaTrainingPhase2.model.UserInfo;
-import com.training.JavaTrainingPhase2.security.AuthRequest;
-import com.training.JavaTrainingPhase2.service.JwtService;
-import com.training.JavaTrainingPhase2.service.UserInfoService;
+import com.training.javatrainingphase2.model.UserInfo;
+import com.training.javatrainingphase2.security.AuthRequest;
+import com.training.javatrainingphase2.service.JwtService;
+import com.training.javatrainingphase2.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

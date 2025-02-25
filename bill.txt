@@ -1,0 +1,16 @@
+****************************
+Name: Coca
+Description: Coca Cola
+Quantity: 2
+Price: 20000.0
+Total amount: 40000.0
+****************************
+Name: Hamburger
+Description: Big Hamburger
+Quantity: 1
+Price: 15000.0
+Total amount: 15000.0
+
+****************************
+Total: 55000.0
+Time Order: 2025-02-25 15:06:47

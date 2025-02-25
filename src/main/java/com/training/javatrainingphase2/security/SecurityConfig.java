@@ -1,12 +1,9 @@
-package com.training.JavaTrainingPhase2.security;
+package com.training.javatrainingphase2.security;
 
 
-import com.training.JavaTrainingPhase2.repository.UserInfoRepository;
-import com.training.JavaTrainingPhase2.service.UserInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.training.javatrainingphase2.service.UserInfoService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,8 +12,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -27,9 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final UserInfoService userInfoService;
+    private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfig (@Lazy UserInfoService userInfoService){
+    public SecurityConfig (UserInfoService userInfoService, PasswordEncoder passwordEncoder){
         this.userInfoService = userInfoService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Bean
@@ -44,7 +41,7 @@ public class SecurityConfig {
         httpSecurity
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/addNewUser", "/auth/generateToken", "/menu/*").permitAll()
+                        .requestMatchers("/auth/addNewUser", "/auth/generateToken", "/menu/*", "/bill/*", "/billItems/*").permitAll()
                         .requestMatchers("/auth/user/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
@@ -57,15 +54,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userInfoService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
         return authenticationProvider;
     }
 

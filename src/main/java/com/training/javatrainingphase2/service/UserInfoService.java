@@ -1,16 +1,13 @@
-package com.training.JavaTrainingPhase2.service;
+package com.training.javatrainingphase2.service;
 
-import com.training.JavaTrainingPhase2.model.UserInfo;
-import com.training.JavaTrainingPhase2.repository.UserInfoRepository;
-import com.training.JavaTrainingPhase2.security.UserInfoDetails;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import com.training.javatrainingphase2.model.UserInfo;
+import com.training.javatrainingphase2.repository.UserInfoRepository;
+import com.training.javatrainingphase2.security.UserInfoDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -32,6 +29,14 @@ public class UserInfoService implements UserDetailsService {
 
         return userInfo.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User with user name + " + username + " not found!"));
+    }
+
+    public String getUserRole(String email){
+        Optional<UserInfo> userInfo = userInfoRepository.getByEmail(email);
+        if (userInfo.isEmpty()){
+            return "";
+        }
+        return userInfo.get().getRoles();
     }
 
     public String addUser(UserInfo userInfo){

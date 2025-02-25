@@ -1,4 +1,4 @@
-package com.training.JavaTrainingPhase2.service;
+package com.training.javatrainingphase2.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,18 +17,24 @@ import java.util.function.Function;
 @Component
 public class JwtService {
     public static final String SECRET = "PmZJQjuTXs3MNRRBFAPItnm+K38e3fqLjaSXZxyx2/i1Vh2eKX3y2I/+474Sy5FM4CLmXtWcVvL3RBTkGqbyzw==";
+    private final UserInfoService userInfoService;
+
+    public JwtService(UserInfoService userInfoService){
+        this.userInfoService = userInfoService;
+    }
 
     public String generateToken(String username){
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        String roles = userInfoService.getUserRole(username);
+        return createToken(claims, username, roles);
     }
 
-    private String createToken(Map<String, Object> claims, String username){
+    private String createToken(Map<String, Object> claims, String username, String roles){
         return Jwts.builder()
-                .setClaims(claims)
+                .setClaims(Map.of("roles", roles))
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // Valid for 30 minutes
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // Valid for 1 day
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -48,6 +53,11 @@ public class JwtService {
     // Extract the expiration date from the token
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    // Extract user role
+    public String extractUserRole(String token){
+        return extractClaim(token, claims -> claims.get("roles", String.class));
     }
 
     // Extract a claim from the token

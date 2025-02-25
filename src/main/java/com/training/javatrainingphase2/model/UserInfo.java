@@ -1,4 +1,4 @@
-package com.training.JavaTrainingPhase2.model;
+package com.training.javatrainingphase2.model;
 
 
 import jakarta.persistence.Entity;

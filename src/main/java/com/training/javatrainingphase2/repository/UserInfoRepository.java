@@ -1,6 +1,6 @@
-package com.training.JavaTrainingPhase2.repository;
+package com.training.javatrainingphase2.repository;
 
-import com.training.JavaTrainingPhase2.model.UserInfo;
+import com.training.javatrainingphase2.model.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
