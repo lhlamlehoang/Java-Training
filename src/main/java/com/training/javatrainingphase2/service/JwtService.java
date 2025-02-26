@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,19 +19,20 @@ import java.util.function.Function;
 @Component
 public class JwtService {
     public static final String SECRET = "PmZJQjuTXs3MNRRBFAPItnm+K38e3fqLjaSXZxyx2/i1Vh2eKX3y2I/+474Sy5FM4CLmXtWcVvL3RBTkGqbyzw==";
+    private static final Logger log = LoggerFactory.getLogger(JwtService.class);
     private final UserInfoService userInfoService;
 
     public JwtService(UserInfoService userInfoService){
         this.userInfoService = userInfoService;
     }
 
-    public String generateToken(String username){
+    public String generateToken(String username, String roles){
         Map<String, Object> claims = new HashMap<>();
-        String roles = userInfoService.getUserRole(username);
         return createToken(claims, username, roles);
     }
 
     private String createToken(Map<String, Object> claims, String username, String roles){
+        log.info("Generate token");
         return Jwts.builder()
                 .setClaims(Map.of("roles", roles))
                 .setSubject(username)

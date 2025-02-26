@@ -28,15 +28,7 @@ public class UserInfoService implements UserDetailsService {
         Optional<UserInfo> userInfo = userInfoRepository.getByEmail(username);
 
         return userInfo.map(UserInfoDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User with user name + " + username + " not found!"));
-    }
-
-    public String getUserRole(String email){
-        Optional<UserInfo> userInfo = userInfoRepository.getByEmail(email);
-        if (userInfo.isEmpty()){
-            return "";
-        }
-        return userInfo.get().getRoles();
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + username + " not found!"));
     }
 
     public String addUser(UserInfo userInfo){

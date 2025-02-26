@@ -4,11 +4,18 @@ package com.training.javatrainingphase2.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.training.javatrainingphase2.model.MenuItems;
 import com.training.javatrainingphase2.service.MenuService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,14 +24,18 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/menu")
+@Tag(name = "Menu Controller", description = "Manage menu items")
+@Slf4j
 public class MenuController {
+    private static final Logger log = LoggerFactory.getLogger(MenuController.class);
     private final MenuService menuService;
 
     public MenuController (MenuService menuService){
         this.menuService = menuService;
     }
 
-    @GetMapping("/getAll")
+    @Operation(description = "Get all items by pagination")
+    @GetMapping
     public Map<String, Object> getAllItems(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size){
         Page<MenuItems> p = menuService.getAllItems(PageRequest.of(page, size));
         return Map.of(
@@ -36,12 +47,15 @@ public class MenuController {
         );
     }
 
-    @GetMapping("/getById")
-    public ResponseEntity<Object> getItemById(@RequestParam("id") Long id, @RequestHeader("Authorization") String token){
-        return menuService.getItemById(id, token);
+    @Operation(description = "Get menu item by id")
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getItemById(@PathVariable Long id){
+        return menuService.getItemById(id);
     }
 
-    @PostMapping(value = "/addItem", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+
+    @Operation(description = "Add new menu item")
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> addItem (@RequestHeader("Authorization") String token,
                                            @RequestPart("itemJson") String itemJson,
                                            @RequestPart("image") MultipartFile img){
@@ -58,12 +72,14 @@ public class MenuController {
         }
     }
 
-    @DeleteMapping("/deleteById")
-    public ResponseEntity<String> deleteItem(@RequestParam("id") Long id, @RequestHeader("Authorization") String token){
+    @Operation(description = "Delete menu item by id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteItem(@PathVariable Long id, @RequestHeader("Authorization") String token){
         return menuService.deleteItemById(id, token);
     }
 
-    @PutMapping("/update")
+    @Operation(description = "Update menu item")
+    @PutMapping
     public ResponseEntity<String> updateItem(@RequestPart("itemJson") String itemJson,
                                              @RequestPart("image") MultipartFile img,
                                              @RequestHeader("Authorization") String token) {
@@ -79,8 +95,9 @@ public class MenuController {
         }
     }
 
-    @PostMapping("/findItem")
-    public Map<String, Object> findItem(@RequestParam("keyword") String keyword,
+    @Operation(description = "Search menu item by keyword")
+    @GetMapping("/search")
+    public Map<String, Object> findItem(@RequestParam(value = "s") String keyword,
                                         @RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "10") int size){
         Page<MenuItems> p = menuService.findItem(keyword, PageRequest.of(page, size));

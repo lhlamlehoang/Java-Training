@@ -1,6 +1,7 @@
 package com.training.javatrainingphase2.security;
 
 
+import com.training.javatrainingphase2.service.JwtService;
 import com.training.javatrainingphase2.service.UserInfoService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,18 +22,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-
+    private final JwtService jwtService;
     private final UserInfoService userInfoService;
     private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfig (UserInfoService userInfoService, PasswordEncoder passwordEncoder){
+    public SecurityConfig (JwtService jwtService, UserInfoService userInfoService, PasswordEncoder passwordEncoder){
+        this.jwtService = jwtService;
         this.userInfoService = userInfoService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Bean
     public JwtAuthFilter jwtAuthFilter() {
-        return new JwtAuthFilter();
+        return new JwtAuthFilter(jwtService, userInfoService);
     }
 
 
@@ -39,12 +42,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
         httpSecurity
-                .csrf((csrf) -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/addNewUser", "/auth/generateToken", "/menu/*", "/bill/*", "/billItems/*").permitAll()
                         .requestMatchers("/auth/user/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
-                        .anyRequest().authenticated())
+                        .requestMatchers("/menu/**", "/bill/**", "/billItems/**").authenticated()
+                        .anyRequest().permitAll())
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

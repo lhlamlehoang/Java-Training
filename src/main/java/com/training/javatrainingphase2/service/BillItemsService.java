@@ -1,5 +1,7 @@
 package com.training.javatrainingphase2.service;
 
+import com.training.javatrainingphase2.exception.BillItemNotFoundException;
+import com.training.javatrainingphase2.exception.BillNotFoundException;
 import com.training.javatrainingphase2.model.Bill;
 import com.training.javatrainingphase2.model.BillItems;
 import com.training.javatrainingphase2.repository.BillItemsRepository;
@@ -23,14 +25,8 @@ public class BillItemsService {
 
     @Transactional
     public ResponseEntity<String> updateItemQuantity(Long billId, Long billItemId, int quantity){
-        double total = 0;
-        Optional<Bill> opBill = billRepository.findById(billId);
-        if (opBill.isEmpty()){
-            return new ResponseEntity<>("Bill id not exist!", HttpStatus.BAD_REQUEST);
-        }
-
+        Bill bill = billRepository.findById(billId).orElseThrow(() -> new BillNotFoundException("Bill not found with id " + billId));
         billItemsRepository.modifyQuantity(billItemId, quantity);
-        Bill bill = opBill.get();
         updateBillTotal(bill);
 
         return new ResponseEntity<>("Item quantity updated!", HttpStatus.OK);
@@ -38,11 +34,7 @@ public class BillItemsService {
 
     @Transactional
     public ResponseEntity<String> addItemIntoBill(Long billId, BillItems billItems){
-        Optional<Bill> opBill = billRepository.findById(billId);
-        if (opBill.isEmpty()){
-            return new ResponseEntity<>("Bill id not exist!", HttpStatus.BAD_REQUEST);
-        }
-        Bill bill = opBill.get();
+        Bill bill = billRepository.findById(billId).orElseThrow(() -> new BillNotFoundException("Bill not found with id " + billId));
 
         // Cumulate quantity when add the same item
         boolean isCumulated = false;
@@ -62,16 +54,12 @@ public class BillItemsService {
 
         updateBillTotal(bill);
 
-        return new ResponseEntity<>("Item added into bill!", HttpStatus.OK);
+        return new ResponseEntity<>("Item added into bill!", HttpStatus.CREATED);
     }
 
     @Transactional
     public ResponseEntity<String> deleteItemFromBill(Long billItemId){
-        Optional<BillItems> opBillItem = billItemsRepository.findById(billItemId);
-        if (opBillItem.isEmpty()){
-            return new ResponseEntity<>("Bill item id not exist!", HttpStatus.BAD_REQUEST);
-        }
-        BillItems item = opBillItem.get();
+        BillItems item = billItemsRepository.findById(billItemId).orElseThrow(() -> new BillItemNotFoundException("Bill item not found with id " + billItemId));
         item.getBill().getBillItems().remove(item);
         billItemsRepository.delete(item);
         updateBillTotal(item.getBill());
