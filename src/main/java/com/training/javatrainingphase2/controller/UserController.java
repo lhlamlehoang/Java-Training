@@ -7,6 +7,7 @@ import com.training.javatrainingphase2.service.UserInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +31,7 @@ public class UserController {
 
     @Operation(description = "Add new user (no need auth)")
     @PostMapping("/addNewUser")
-    public String addNewUser(@RequestBody UserInfo userInfo){
+    public ResponseEntity<String> addNewUser(@RequestBody UserInfo userInfo){
         return userInfoService.addUser(userInfo);
     }
 

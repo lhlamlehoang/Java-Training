@@ -1,6 +1,7 @@
 package com.training.javatrainingphase2.security;
 
 import com.training.javatrainingphase2.model.UserInfo;
+import org.apache.catalina.valves.rewrite.InternalRewriteMap;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ public class UserInfoDetails implements UserDetails {
         this.password = userInfo.getPassword();
         this.authorities = Arrays.stream(userInfo.getRoles().split(","))
                 .map(String::trim)
+                .map(String::toUpperCase)
                 .map(role -> new SimpleGrantedAuthority(role.startsWith("ROLE_") ? role : "ROLE_" + role))
                 .collect(Collectors.toList());
     }

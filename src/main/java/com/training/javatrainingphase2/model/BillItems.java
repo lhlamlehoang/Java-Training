@@ -19,6 +19,14 @@ public class BillItems {
     @JsonBackReference
     private Bill bill;
 
+
+    public BillItems(Long id, MenuItems item, Integer quantity, Bill bill) {
+        this.id = id;
+        this.item = item;
+        this.quantity = quantity;
+        this.bill = bill;
+    }
+
     public BillItems(MenuItems item, Integer quantity, Bill bill) {
         this.item = item;
         this.quantity = quantity;

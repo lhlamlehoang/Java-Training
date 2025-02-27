@@ -3,6 +3,8 @@ package com.training.javatrainingphase2.service;
 import com.training.javatrainingphase2.model.UserInfo;
 import com.training.javatrainingphase2.repository.UserInfoRepository;
 import com.training.javatrainingphase2.security.UserInfoDetails;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,9 +33,9 @@ public class UserInfoService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + username + " not found!"));
     }
 
-    public String addUser(UserInfo userInfo){
+    public ResponseEntity<String> addUser(UserInfo userInfo){
         userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         userInfoRepository.save(userInfo);
-        return "User added successfully!";
+        return new ResponseEntity<>("User added successfully!", HttpStatus.CREATED);
     }
 }
